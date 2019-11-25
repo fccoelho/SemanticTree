@@ -1,9 +1,9 @@
 =============
-semantic_tree
+Semantic tree
 =============
 
 
-Add a short description here!
+This package provide a semanticTree command, which
 
 
 Description
