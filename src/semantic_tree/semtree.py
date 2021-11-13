@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from gensim.models.word2vec import Word2Vec
+from gensim.models.doc2vec import Doc2Vec
 import networkx as nx
 import matplotlib.pyplot as plt
 from queue import Queue
@@ -21,6 +22,7 @@ class AnimateSemanticTree:
         self.scanned = []
         self.root = None
         self.model = model
+        self.model_type = None
 
 
 
@@ -39,6 +41,9 @@ class AnimateSemanticTree:
         # print('adding', viz)
         self.tree.add_weighted_edges_from([(wo, v, w) for v, w in viz])
         # print('Edges: ', self.tree.edges())
+
+    def build_document_neighbors(self, docid):
+        pass
 
     def build_neighbors(self, word):
         try:
@@ -84,7 +89,15 @@ def send_to_gource(tree):
 
 def load_model(model_fname):
     print("Loading Data...")
-    return Word2Vec.load(model_fname)
+    try:
+        model = Word2Vec.load(model_fname)
+        print("Detected Word2Vec model")
+        self.model_type = 'w2v'
+    except:
+        model = Doc2Vec.load(model_fname)
+        print("Detected Doc2Vec model")
+        self.model_type = 'd2v'
+    return model
 
 def demo():
     gcommand = "gource --realtime --title \"SemanticTree\" --hide date --log-format custom --auto-skip-seconds 1 -"
@@ -100,7 +113,7 @@ def demo():
 def run():
     gcommand = "gource --realtime --title \"Semtree\" --hide date --log-format custom --auto-skip-seconds 1 -"
     parser = argparse.ArgumentParser(
-        description="Visualize the semantic neighborhood of a term. given a Gensim's trained model")
+        description="Visualize the semantic neighborhood of a term. given a Gensim's Word2vec trained model")
     parser.add_argument('model', type=str, help='file name of a Gensim\'s Word2vec model.')
     parser.add_argument('-w', help='the word or bi_gram to analyze')
     parser.add_argument('-n', type=int, default=15, help='Max number of neighbors to scan.')
