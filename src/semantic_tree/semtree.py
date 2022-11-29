@@ -31,7 +31,7 @@ class AnimateSemanticTree:
         if word in self.scanned:
             viz = []
         else:
-            viz = [(v, s) for v, s in self.model.most_similar(word, topn=nviz) if s >= sim]
+            viz = [(v, s) for v, s in self.model.wv.most_similar(word, topn=nviz) if s >= sim]
             self.scanned.append(word)
             self.make_edges(word, viz)
         # print("Neighbors of {}: ".format(word), viz)
@@ -47,9 +47,9 @@ class AnimateSemanticTree:
 
     def build_neighbors(self, word):
         try:
-            assert word in self.model.wv.vocab
+            assert word in self.model.wv.key_to_index
         except AssertionError:
-            newword = list(self.model.wv.vocab.keys())[random.randint(len(self.model.wv.vocab))]
+            newword = list(self.model.wv.key_to_index.keys())[random.randint(0,len(self.model.wv.key_to_index)-1)]
             print(f"Word {word} not in vocabulary trying {newword}")
             word = newword
         print("Building graph...")
@@ -92,11 +92,11 @@ def load_model(model_fname):
     try:
         model = Word2Vec.load(model_fname)
         print("Detected Word2Vec model")
-        self.model_type = 'w2v'
+        model_type = 'w2v'
     except:
         model = Doc2Vec.load(model_fname)
         print("Detected Doc2Vec model")
-        self.model_type = 'd2v'
+        model_type = 'd2v'
     return model
 
 def demo():
@@ -111,7 +111,7 @@ def demo():
     os.system('cat gource_log.log |{}'.format(gcommand))
 
 def run():
-    gcommand = "gource --realtime --title \"Semtree\" --hide date --log-format custom --auto-skip-seconds 1 -"
+    gcommand = "gource --realtime --title \"Semtree\" --hide date --log-format custom --auto-skip-seconds 0.3 -"
     parser = argparse.ArgumentParser(
         description="Visualize the semantic neighborhood of a term. given a Gensim's Word2vec trained model")
     parser.add_argument('model', type=str, help='file name of a Gensim\'s Word2vec model.')
