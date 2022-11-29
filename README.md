@@ -9,7 +9,11 @@ This package provide a semanticTree command, which generates a visualization of 
 ## Installation
 
 
-This package requires that [Gource](https://gource.io/) is installed locally. On ubuntu it can be apt installed.
+This package requires that [Gource](https://gource.io/) is installed locally. On Ubuntu, it can be apt installed.
+
+```bash
+$ apt install gource
+```
 
 SemanticTree itself can be installed from PyPI with `pip`.
 
