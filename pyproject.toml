@@ -1,6 +1,5 @@
 [tool.poetry]
 name = "semantic-tree"
-version = "1.1.0"
 description = "Creates a visualization of the semantic neighborhood of a word in a Gensim's Word2Vec vector space model using the Gource visualizer"
 authors = ["Flávio Codeço Coelho <fccoelho@gmail.com>"]
 license = "MIT"
